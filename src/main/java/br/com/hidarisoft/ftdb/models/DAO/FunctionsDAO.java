@@ -1,5 +1,6 @@
 package br.com.hidarisoft.ftdb.models.DAO;
 
+
 public class FunctionsDAO {
 
     private static final long serialVersionUID = 1L;
