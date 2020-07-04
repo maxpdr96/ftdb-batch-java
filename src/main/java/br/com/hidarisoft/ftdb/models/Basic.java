@@ -1,5 +1,7 @@
 package br.com.hidarisoft.ftdb.models;
 
+import br.com.hidarisoft.ftdb.models.DAO.BasicDAO;
+
 import java.io.Serializable;
 
 public class Basic implements Serializable {
@@ -8,6 +10,16 @@ public class Basic implements Serializable {
 
     private Long id;
     private String name;
+
+    public Basic(BasicDAO basicDAO) {
+        this.id = basicDAO.getId();
+        this.name = basicDAO.getName();
+    }
+
+    public Basic(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

@@ -8,12 +8,21 @@ public class FunctionsDAO {
     private String language;
     private String timeStamp;
 
-    public String getVersion() {
-        return version;
+    public FunctionsDAO() {
+    }
+
+    public FunctionsDAO(String version, String language, String timeStamp) {
+        this.version = version;
+        this.language = language;
+        this.timeStamp = timeStamp;
     }
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public String getLanguage() {

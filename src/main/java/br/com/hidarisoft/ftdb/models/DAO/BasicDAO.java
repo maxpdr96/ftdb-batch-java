@@ -15,6 +15,8 @@ public class BasicDAO implements Serializable {
     @XmlElement(type = FunctionsDAO.class)
     private FunctionsDAO functionsDAO;
 
+
+
     public Long getId() {
         return id;
     }

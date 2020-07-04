@@ -1,5 +1,7 @@
 package br.com.hidarisoft.ftdb.models;
 
+import br.com.hidarisoft.ftdb.models.DAO.FunctionsDAO;
+
 import java.io.Serializable;
 
 public class Functions implements Serializable {
@@ -10,12 +12,28 @@ public class Functions implements Serializable {
     private String language;
     private String timeStamp;
 
-    public String getVersion() {
-        return version;
+    public Functions() {
     }
+
+    public Functions(String version, String language, String timeStamp) {
+        this.version = version;
+        this.language = language;
+        this.timeStamp = timeStamp;
+    }
+
+    public Functions(FunctionsDAO functionsDAO) {
+        this.version = functionsDAO.getVersion();
+        this.language = functionsDAO.getLanguage();
+        this.timeStamp = functionsDAO.getTimeStamp();
+    }
+
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public String getLanguage() {
