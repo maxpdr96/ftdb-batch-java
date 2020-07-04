@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<basic>
+    <id>1234567890</id>
+    <name>Test JOB</name>
+    <functions>
+        <version>1.0</version>
+        <language>Pt_BR</language>
+        <timestamp>2020-07-03T21:04:12:233</timestamp>
+    </functions>
+</basic>
