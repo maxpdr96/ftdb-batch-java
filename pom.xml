@@ -15,7 +15,7 @@
         <jdk.version>1.6</jdk.version>
         <spring.version>3.2.2.RELEASE</spring.version>
         <springFramework.version>3.2.0.RELEASE</springFramework.version>
-        <spring.batch.version>2.2.0.RELEASE</spring.batch.version>
+        <spring.batch.version>4.2.4.RELEASE</spring.batch.version>
     </properties>
 
     <dependencies>
