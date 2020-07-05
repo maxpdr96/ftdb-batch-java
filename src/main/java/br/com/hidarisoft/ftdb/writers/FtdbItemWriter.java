@@ -86,10 +86,30 @@ public class FtdbItemWriter implements ItemWriter<BasicDAO> {
                 }
             }
         }
+
         }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
 
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public SimpleDateFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(SimpleDateFormat format) {
+        this.format = format;
+    }
 }

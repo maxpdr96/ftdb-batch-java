@@ -42,7 +42,7 @@
 
 
     <bean id="multiResourceReader" class="org.springframework.batch.item.file.MultiResourceItemReader" scope="step">
-        <property name="resources" value="#stepExecutionContext['inputFilePath']" />
+        <property name="resources" value="#{stepExecutionContext['inputFilePath']}" />
         <property name="delegate" ref="xmlItemReader" />
         <property name="strict" value="true" />
     </bean>
@@ -51,7 +51,6 @@
     <bean id="xmlItemReader"
           class="org.springframework.batch.item.xml.StaxEventItemReader">
         <property name="fragmentRootElementName" value="basic"/>
-        <property name="resource" value="classpath:/xml/teste.xml"/>
         <property name="unmarshaller" ref="basicUnmarshaller"/>
     </bean>
 
