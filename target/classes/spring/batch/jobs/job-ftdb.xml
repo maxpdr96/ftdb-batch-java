@@ -16,15 +16,36 @@
     	http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool-3.2.xsd">
 
 
-    <batch:job id="reportJob">
-        <batch:step id="step1">
-            <batch:tasklet>
-                <batch:chunk reader="xmlItemReader" writer="ftdbItemWriter"
-                             commit-interval="1">
-                </batch:chunk>
-            </batch:tasklet>
+    <task:scheduled-tasks scheduler="myScheduler1">
+        <task:scheduled ref="importLauncher" method="launch" fixed-delay="10000"/>
+    </task:scheduled-tasks>
+
+
+    <batch:job id="basicJob">
+        <batch:listeners>
+            <batch:listener ref="logFileJobListener"/>
+            <batch:listener ref="logFileStepListener"/>
+        </batch:listeners>
+
+        <batch:step id="masterStep">
+            <batch:partition step="slave" partitioner="rangePartitioner">
+                <batch:handler grid-size="6"/>
+            </batch:partition>
         </batch:step>
     </batch:job>
+
+    <batch:step id="slave">
+        <batch:tasklet task-executor="taskExecutor" throttle-limit="3">
+            <batch:chunk reader="multiResourceReader" writer="ftdbItemWriter" commit-interval="1"/>
+        </batch:tasklet>
+    </batch:step>
+
+
+    <bean id="multiResourceReader" class="org.springframework.batch.item.file.MultiResourceItemReader" scope="step">
+        <property name="resources" value="#stepExecutionContext['inputFilePath']" />
+        <property name="delegate" ref="xmlItemReader" />
+        <property name="strict" value="true" />
+    </bean>
 
     <!-- Read XML file -->
     <bean id="xmlItemReader"
@@ -38,23 +59,46 @@
     <bean id="basicUnmarshaller"
           class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
         <property name="classesToBeBound">
-          <list>
-              <value>br.com.hidarisoft.ftdb.models.DAO.BasicDAO</value>
-          </list>
+            <list>
+                <value>br.com.hidarisoft.ftdb.models.DAO.BasicDAO</value>
+            </list>
         </property>
     </bean>
 
 
+    <task:annotation-driven />
+    <task:scheduler id="myScheduler1" pool-size="2" />
+
+
+    <bean id="importLauncher" class="br.com.hidarisoft.ftdb.configs.ImportLauncher">
+        <property name="jobLauncher" ref="jobLauncher" />
+        <property name="job" ref="basicJob" />
+        <property name="dateFormat" value="dd/MM/yyyy HH:mm:ss" />
+    </bean>
+
     <bean id="ftdbItemWriter"
           class="br.com.hidarisoft.ftdb.writers.FtdbItemWriter" scope="step">
-        <property name="jdbcTemplate" ref="idJdbcTemplate" />
+        <property name="jdbcTemplate" ref="idJdbcTemplate"/>
     </bean>
 
+    <bean id="rangePartitioner" class="br.com.hidarisoft.ftdb.partitioners.FilePartitioner" scope="step">
+        <property name="resources" value="${hidari.file.path.all}" />
+    </bean>
 
     <bean id="idJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="logFileStepListener" class="br.com.hidarisoft.ftdb.listeners.LogFileStepListener" />
+    <bean id="logFileJobListener" class="br.com.hidarisoft.ftdb.listeners.LogFileJobListener" />
+
+    <bean id="taskExecutor" class="org.springframework.core.task.SyncTaskExecutor" />
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:/global.properties</value>
+        </property>
+    </bean>
 </beans>
 
 
